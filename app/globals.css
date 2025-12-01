@@ -1,0 +1,242 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* --------------------------------------------------
+   Design tokens (light/dark aware)
+-------------------------------------------------- */
+:root {
+  /* Brand */
+  --accent: 16 185 129;     /* emerald */
+
+  /* Surface & text */
+  --bg: 245 248 246;        /* light mint-charcoal blend */
+  --fg: 15 23 32;           /* charcoal */
+  --muted: 88 101 113;      /* cool graphite */
+
+  /* Focus ring */
+  --ring: var(--accent);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: 13 17 23;
+    --fg: 222 233 226;
+    --muted: 156 171 164;
+  }
+}
+
+/* --------------------------------------------------
+   Base element polish
+-------------------------------------------------- */
+html { scroll-behavior: smooth; text-size-adjust: 100%; }
+
+body {
+  color: rgb(var(--fg));
+  background-color: rgb(var(--bg));
+  font-synthesis-weight: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: var(--font-inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans");
+}
+
+/* Headings use serif for elegance */
+@layer base {
+  h1, h2, h3, h4 { font-family: var(--font-serif, var(--font-jakarta, var(--font-inter, ui-sans-serif))); letter-spacing: -0.01em; }
+  /* Tailwind v4: avoid @apply for utilities here; use raw CSS */
+  h1 { font-size: 2.25rem; line-height: 2.5rem; font-weight: 600; }
+  h2 { font-size: 1.5rem;  line-height: 2rem;  font-weight: 600; }
+  h3 { font-size: 1.25rem; line-height: 1.75rem; font-weight: 600; }
+  h4 { font-size: 1rem;    line-height: 1.5rem;  font-weight: 600; }
+  p  { line-height: 1.75rem; color: rgb(var(--muted)); }
+}
+
+/* Responsive heading sizes (no variants in @apply) */
+@media (min-width: 640px) {
+  h1 { font-size: 3rem;   line-height: 1; }
+  h2 { font-size: 1.875rem; line-height: 2.25rem; }
+}
+
+/* Links */
+a { color: #2563eb; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+a:hover { color: #60a5fa; text-decoration: underline; }
+
+/* Selection */
+::selection { background: color-mix(in oklab, rgb(var(--accent)) 22%, transparent); color: #0f172a; }
+
+/* Focus visibility */
+:focus-visible { outline: 2px solid rgb(var(--ring)); outline-offset: 2px; border-radius: 6px; }
+
+/* Media defaults */
+img, video { display: block; max-width: 100%; height: auto; }
+svg { shape-rendering: geometricPrecision; text-rendering: optimizeLegibility; }
+
+/* Lists & markers */
+ul, ol { padding-left: 1.25rem; }
+li::marker { color: rgb(var(--accent)); }
+
+/* Code & pre */
+code, kbd, samp {
+  border-radius: 0.375rem; /* rounded-md */
+  background: rgba(0,0,0,0.05); /* bg-black/5 */
+  padding: 0.125rem 0.375rem; /* py-0.5 px-1.5 */
+  font-size: 0.875rem; /* text-sm */
+  line-height: 1.25rem;
+}
+pre {
+  border-radius: 0.75rem; /* rounded-xl */
+  background: rgba(0,0,0,0.9); /* bg-black/90 */
+  color: #fff;
+  padding: 1rem; /* p-4 */
+  overflow-x: auto;
+}
+
+/* Comfortable measure for container */
+.container { max-width: 1120px; }
+
+/* --------------------------------------------------
+   Elegant component helpers (opt-in classes)
+-------------------------------------------------- */
+@layer components {
+  .card {
+    border-radius: 1rem; /* rounded-2xl */
+    border: 1px solid rgba(12,49,34,0.08);
+    background: rgba(255,255,255,0.9);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px); /* glassy */
+  }
+  /* Buttons: variants are self-contained so markup can use just `btn-primary` or `btn-ghost` */
+ .btn,
+.btn-primary,
+.btn-ghost,
+.btn-success,
+.btn-success-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.75rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.25rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+    transition: background-color .2s, color .2s, box-shadow .2s, transform .2s, opacity .2s;
+  }
+
+  .btn-primary {
+    color: #052011;
+    background: linear-gradient(90deg,#a7f3d0 0%,#34d399 45%,#10b981 100%);
+  }
+  .btn-primary:hover {
+    filter: brightness(1.03);
+    box-shadow: 0 4px 18px rgba(16,185,129,0.28);
+  }
+
+  .btn-ghost {
+    color: #0f2117;
+    border: 1px solid rgba(16,185,129,0.22);
+    background: rgba(255,255,255,0.9);
+  }
+  .btn-ghost:hover {
+    background: #ffffff;
+    box-shadow: 0 4px 14px rgba(16,185,129,0.16);
+  }
+
+  /* Ensure focus ring feels consistent with the blue/teal theme */
+  .btn:focus-visible,
+  .btn-primary:focus-visible,
+  .btn-ghost:focus-visible {
+    outline-color: #059669;
+  }
+
+  .btn svg, .btn-primary svg, .btn-ghost svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  /* Success button variants (green) */
+  .btn-success {
+    color: #05263b;
+    background: linear-gradient(90deg,#34d399 0%,#22c55e 45%,#0ea5e9 100%);
+  }
+  .btn-success:hover {
+    filter: brightness(1.02);
+    box-shadow: 0 4px 14px rgba(14,165,233,0.18);
+  }
+
+  .btn-success-ghost {
+    color: #0f5132; /* soft green text */
+    border: 1px solid rgba(34,197,94,0.35); /* green-ish border */
+    background: rgba(255,255,255,0.92);
+  }
+  .btn-success-ghost:hover {
+    background: #fff;
+    box-shadow: 0 4px 14px rgba(34,197,94,0.14);
+  }
+
+  /* Success focus ring */
+  .btn-success:focus-visible,
+  .btn-success-ghost:focus-visible {
+    outline-color: #16A34A;
+  }
+}
+
+/* Ambient background animations */
+.float-1 { animation: float1 18s ease-in-out infinite; will-change: transform; }
+.float-2 { animation: float2 24s ease-in-out infinite; will-change: transform; }
+
+@keyframes float1 {
+  0%   { transform: translate3d(0,0,0) scale(1); }
+  50%  { transform: translate3d(30px,-20px,0) scale(1.08); }
+  100% { transform: translate3d(0,0,0) scale(1); }
+}
+@keyframes float2 {
+  0%   { transform: translate3d(0,0,0) scale(1); }
+  50%  { transform: translate3d(-20px,25px,0) scale(1.05); }
+  100% { transform: translate3d(0,0,0) scale(1); }
+}
+
+/* Ensure ambient blobs always animate */
+@layer utilities {
+  .float-1 { animation: float1 18s ease-in-out infinite !important; }
+  .float-2 { animation: float2 24s ease-in-out infinite !important; }
+}
+
+
+
+/* Ambient background animations */
+.float-1 { animation: float1 18s ease-in-out infinite; will-change: transform; }
+.float-2 { animation: float2 24s ease-in-out infinite; will-change: transform; }
+
+@keyframes float1 {
+  0%   { transform: translate3d(0,0,0) scale(1); }
+  50%  { transform: translate3d(30px,-20px,0) scale(1.08); }
+  100% { transform: translate3d(0,0,0) scale(1); }
+}
+@keyframes float2 {
+  0%   { transform: translate3d(0,0,0) scale(1); }
+  50%  { transform: translate3d(-20px,25px,0) scale(1.05); }
+  100% { transform: translate3d(0,0,0) scale(1); }
+}
+
+
+/* --------------------------------------------------
+   Scrollbar (subtle, cross-browser)
+-------------------------------------------------- */
+* { scrollbar-width: thin; scrollbar-color: rgba(0,0,0,.25) transparent; }
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-thumb { background: rgba(0,0,0,.25); border-radius: 9999px; border: 2px solid transparent; background-clip: padding-box; }
+
+/* --------------------------------------------------
+   Reduced motion safety
+-------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
